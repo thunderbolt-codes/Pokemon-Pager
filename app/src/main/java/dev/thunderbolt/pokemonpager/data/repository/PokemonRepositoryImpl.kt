@@ -31,13 +31,13 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override fun getPokemon(id: Int): Flow<Response<Pokemon>> = flow {
         val localData = pokemonDatabase.dao.getById(id)
-        if (localData != null) emit(Response.Success(localData))
+        if (localData != null) emit(Response.Loading(localData))
         try {
             val remoteData = pokemonApi.getPokemon(id)!!.toPokemon()
             pokemonDatabase.dao.insert(remoteData.toPokemonEntity())
             emit(Response.Success(remoteData))
         } catch (e: ApolloException) {
-            emit(Response.Error(e = e.message.toString(), d = localData))
+            emit(Response.Error(error = e.message.toString(), data = localData))
         }
     }
 }
