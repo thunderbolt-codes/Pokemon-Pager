@@ -25,7 +25,8 @@ class PokemonRemoteMediator @Inject constructor(
     private val NEXT_OFFSET = intPreferencesKey("pokemon_next_offset")
 
     override suspend fun load(
-        loadType: LoadType, state: PagingState<Int, PokemonEntity>
+        loadType: LoadType,
+        state: PagingState<Int, PokemonEntity>,
     ): MediatorResult {
         return try {
             val offset = when (loadType) {
@@ -51,13 +52,12 @@ class PokemonRemoteMediator @Inject constructor(
             dataStore.edit { preferences ->
                 preferences[NEXT_OFFSET] = nextOffset
             }
-            // SAVE POKEMONS TO DATABASE
+            // SAVE RESULTS TO DATABASE
             pokemonDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     pokemonDatabase.dao.clearAll()
                 }
-                val entities = results.mapNotNull { it?.toPokemonEntity() }
-                pokemonDatabase.dao.insertAll(entities)
+                pokemonDatabase.dao.insertAll(results.mapNotNull { it?.toPokemonEntity() })
             }
             // CHECK IF END OF PAGINATION REACHED
             MediatorResult.Success(endOfPaginationReached = results.size < state.config.pageSize)

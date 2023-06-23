@@ -59,8 +59,8 @@ class MainActivity : ComponentActivity() {
                             "pokemon/{id}",
                             label = "Pokemon",
                             arguments = listOf(navArgument("id") { type = NavType.IntType }),
-                        ) { backStackEntry ->
-                            PokemonDetailPage(backStackEntry.arguments!!.getInt("id"))
+                        ) {
+                            PokemonDetailPage(showSnackbar = snackbarHostState::showSnackbar)
                         }
                     }
                 }

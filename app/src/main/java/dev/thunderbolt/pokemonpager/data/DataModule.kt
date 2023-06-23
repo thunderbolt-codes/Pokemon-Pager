@@ -31,10 +31,8 @@ class DataModule {
     @Singleton
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
-            produceFile = { context.preferencesDataStoreFile("pokemon_preferences") }
+            corruptionHandler = ReplaceFileCorruptionHandler(produceNewData = { emptyPreferences() }),
+            produceFile = { context.preferencesDataStoreFile("pokemon_preferences") },
         )
     }
 
@@ -45,8 +43,7 @@ class DataModule {
             context,
             PokemonDatabase::class.java,
             "pokemon.db",
-        )
-            .fallbackToDestructiveMigration()
+        ).fallbackToDestructiveMigration()
             .build()
     }
 
@@ -57,22 +54,26 @@ class DataModule {
         pokemonApi: PokemonApi,
         dataStore: DataStore<Preferences>,
     ): Pager<Int, PokemonEntity> {
-        return Pager(
-            config = PagingConfig(pageSize = 20),
-            remoteMediator = PokemonRemoteMediator(
-                pokemonDatabase = pokemonDatabase,
-                pokemonApi = pokemonApi,
-                dataStore = dataStore,
-            ),
-            pagingSourceFactory = {
-                pokemonDatabase.dao.pagingSource()
-            }
-        )
+        return Pager(config = PagingConfig(pageSize = 20), remoteMediator = PokemonRemoteMediator(
+            pokemonDatabase = pokemonDatabase,
+            pokemonApi = pokemonApi,
+            dataStore = dataStore,
+        ), pagingSourceFactory = {
+            pokemonDatabase.dao.pagingSource()
+        })
     }
 
     @Provides
     @Singleton
-    fun providePokemonRepository(pokemonPager: Pager<Int, PokemonEntity>): PokemonRepository {
-        return PokemonRepositoryImpl(pokemonPager)
+    fun providePokemonRepository(
+        pokemonPager: Pager<Int, PokemonEntity>,
+        pokemonDatabase: PokemonDatabase,
+        pokemonApi: PokemonApi,
+    ): PokemonRepository {
+        return PokemonRepositoryImpl(
+            pokemonPager = pokemonPager,
+            pokemonDatabase = pokemonDatabase,
+            pokemonApi = pokemonApi,
+        )
     }
 }
