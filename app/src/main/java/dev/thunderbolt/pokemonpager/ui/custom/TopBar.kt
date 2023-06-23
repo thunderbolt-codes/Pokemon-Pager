@@ -1,4 +1,4 @@
-package dev.thunderbolt.pokemonpager.ui.common
+package dev.thunderbolt.pokemonpager.ui.custom
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -26,7 +26,7 @@ fun TopBar(navController: NavHostController, modifier: Modifier = Modifier) {
         title = {
             Text(title)
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = MaterialTheme.colorScheme.onPrimary,
             navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -38,11 +38,10 @@ fun TopBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back"
+                        contentDescription = null,
                     )
                 }
             }
-        }
+        },
     )
 }
-

@@ -1,22 +1,17 @@
 package dev.thunderbolt.pokemonpager.ui.pokemon.list
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.saveable
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.thunderbolt.pokemonpager.domain.usecase.GetPokemons
 import javax.inject.Inject
 
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val getPokemons: GetPokemons,
 ) : ViewModel() {
 
-    var counter by savedStateHandle.saveable {
-        mutableStateOf(0)
-    }
+    val pokemonPagingDataFlow = getPokemons().cachedIn(viewModelScope)
 
-    fun increaseCounter() {
-        counter++
-    }
 }

@@ -39,7 +39,8 @@ android {
         jvmTarget = "17"
         freeCompilerArgs += [
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-                "-opt-in=androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi"
+                "-opt-in=androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi",
+                "-opt-in=androidx.paging.ExperimentalPagingApi"
         ]
     }
 
@@ -59,7 +60,7 @@ android {
 }
 
 apollo {
-    service("service") {
+    service("pokemon") {
         packageName.set("dev.thunderbolt.pokemonpager.data")
     }
 }
@@ -83,7 +84,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest"
 
     // PAGING
-    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     implementation "androidx.paging:paging-compose:$paging_version"
 
     // HILT
@@ -93,6 +94,17 @@ dependencies {
 
     // APOLLO
     implementation "com.apollographql.apollo3:apollo-runtime:$apollo_version"
+
+    // ROOM
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
+
+    // DATASTORE
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    // COIL
+    implementation "io.coil-kt:coil-compose:2.4.0"
 
     // TEST
     testImplementation "junit:junit:4.13.2"
