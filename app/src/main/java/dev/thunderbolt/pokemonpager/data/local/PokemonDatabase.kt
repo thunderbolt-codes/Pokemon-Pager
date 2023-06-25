@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 
 @Database(
     entities = [PokemonEntity::class],
-    version = 2,
+    version = 1,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)

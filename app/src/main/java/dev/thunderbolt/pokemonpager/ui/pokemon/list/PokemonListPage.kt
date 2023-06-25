@@ -26,27 +26,29 @@ fun PokemonListPage(
     showSnackbar: suspend (String) -> Unit,
 ) {
     val viewModel = hiltViewModel<PokemonListViewModel>()
-    val pokemons = viewModel.pokemonPagingDataFlow.collectAsLazyPagingItems()
+    val pokemonPagingItems = viewModel.pokemonPagingDataFlow.collectAsLazyPagingItems()
 
-    LaunchedEffect(key1 = pokemons.loadState) {
-        if (pokemons.loadState.refresh is LoadState.Error) {
-            showSnackbar((pokemons.loadState.refresh as LoadState.Error).error.message ?: "")
+    LaunchedEffect(key1 = pokemonPagingItems.loadState) {
+        if (pokemonPagingItems.loadState.refresh is LoadState.Error) {
+            showSnackbar(
+                (pokemonPagingItems.loadState.refresh as LoadState.Error).error.message ?: ""
+            )
         }
     }
 
     PokemonListContent(
-        pokemons = pokemons,
+        pokemonPagingItems = pokemonPagingItems,
         navigateToDetail = navigateToDetail,
     )
 }
 
 @Composable
 fun PokemonListContent(
-    pokemons: LazyPagingItems<Pokemon>,
+    pokemonPagingItems: LazyPagingItems<Pokemon>,
     navigateToDetail: (Int) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        if (pokemons.loadState.refresh is LoadState.Loading) {
+        if (pokemonPagingItems.loadState.refresh is LoadState.Loading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
             LazyColumn(
@@ -54,10 +56,10 @@ fun PokemonListContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(
-                    count = pokemons.itemCount,
-                    key = pokemons.itemKey { it.id },
+                    count = pokemonPagingItems.itemCount,
+                    key = pokemonPagingItems.itemKey { it.id },
                 ) { index ->
-                    val pokemon = pokemons[index]
+                    val pokemon = pokemonPagingItems[index]
                     if (pokemon != null) {
                         PokemonItem(
                             pokemon,
@@ -74,7 +76,7 @@ fun PokemonListContent(
                     }
                 }
                 item {
-                    if (pokemons.loadState.append is LoadState.Loading) {
+                    if (pokemonPagingItems.loadState.append is LoadState.Loading) {
                         CircularProgressIndicator(modifier = Modifier.padding(16.dp))
                     }
                 }

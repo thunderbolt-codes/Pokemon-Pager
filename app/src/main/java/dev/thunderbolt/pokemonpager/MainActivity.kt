@@ -42,10 +42,10 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         modifier = Modifier.padding(padding),
                         navController = navController,
-                        startDestination = "pokemons",
+                        startDestination = "pokemon-list",
                     ) {
                         composable(
-                            "pokemons",
+                            "pokemon-list",
                             label = "Gotta Catch 'Em All!",
                         ) {
                             PokemonListPage(

@@ -6,6 +6,6 @@ import dev.thunderbolt.pokemonpager.domain.entity.Response
 import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepository {
-    fun getPokemons(): Flow<PagingData<Pokemon>>
+    fun getPokemonList(): Flow<PagingData<Pokemon>>
     fun getPokemon(id: Int): Flow<Response<Pokemon>>
 }

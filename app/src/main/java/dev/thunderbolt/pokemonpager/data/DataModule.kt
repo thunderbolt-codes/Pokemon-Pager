@@ -43,8 +43,7 @@ class DataModule {
             context,
             PokemonDatabase::class.java,
             "pokemon.db",
-        ).fallbackToDestructiveMigration()
-            .build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -54,13 +53,17 @@ class DataModule {
         pokemonApi: PokemonApi,
         dataStore: DataStore<Preferences>,
     ): Pager<Int, PokemonEntity> {
-        return Pager(config = PagingConfig(pageSize = 20), remoteMediator = PokemonRemoteMediator(
-            pokemonDatabase = pokemonDatabase,
-            pokemonApi = pokemonApi,
-            dataStore = dataStore,
-        ), pagingSourceFactory = {
-            pokemonDatabase.dao.pagingSource()
-        })
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            remoteMediator = PokemonRemoteMediator(
+                pokemonDatabase = pokemonDatabase,
+                pokemonApi = pokemonApi,
+                dataStore = dataStore,
+            ),
+            pagingSourceFactory = {
+                pokemonDatabase.dao.pagingSource()
+            },
+        )
     }
 
     @Provides

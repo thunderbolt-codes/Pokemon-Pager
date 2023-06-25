@@ -14,7 +14,7 @@ class PokemonApi @Inject constructor() {
     private val apolloClient =
         ApolloClient.Builder().serverUrl(BASE_URL).addHttpInterceptor(LoggingInterceptor()).build()
 
-    suspend fun getPokemons(offset: Int, limit: Int): PokemonListQuery.Pokemons? {
+    suspend fun getPokemonList(offset: Int, limit: Int): PokemonListQuery.Pokemons? {
         val response = apolloClient.query(
             PokemonListQuery(
                 offset = offset,

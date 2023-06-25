@@ -22,7 +22,7 @@ class PokemonRemoteMediator @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) : RemoteMediator<Int, PokemonEntity>() {
 
-    private val NEXT_OFFSET = intPreferencesKey("pokemon_next_offset")
+    private val NEXT_OFFSET = intPreferencesKey("next_offset")
 
     override suspend fun load(
         loadType: LoadType,
@@ -42,7 +42,7 @@ class PokemonRemoteMediator @Inject constructor(
                 }
             }
             // MAKE API CALL
-            val apiResponse = pokemonApi.getPokemons(
+            val apiResponse = pokemonApi.getPokemonList(
                 offset = offset,
                 limit = state.config.pageSize,
             )
@@ -55,6 +55,7 @@ class PokemonRemoteMediator @Inject constructor(
             // SAVE RESULTS TO DATABASE
             pokemonDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
+                    // IF REFRESHING, CLEAR DATABASE FIRST
                     pokemonDatabase.dao.clearAll()
                 }
                 pokemonDatabase.dao.insertAll(results.mapNotNull { it?.toPokemonEntity() })
