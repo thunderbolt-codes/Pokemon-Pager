@@ -22,8 +22,8 @@ import androidx.navigation.get
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import dev.thunderbolt.pokemonpager.ui.custom.TopBar
-import dev.thunderbolt.pokemonpager.ui.pokemon.detail.PokemonDetailPage
-import dev.thunderbolt.pokemonpager.ui.pokemon.list.PokemonListPage
+import dev.thunderbolt.pokemonpager.ui.pokemon.detail.PokemonDetailScreen
+import dev.thunderbolt.pokemonpager.ui.pokemon.list.PokemonListScreen
 import dev.thunderbolt.pokemonpager.ui.theme.PokemonPagerTheme
 
 @AndroidEntryPoint
@@ -48,11 +48,11 @@ class MainActivity : ComponentActivity() {
                             "pokemon-list",
                             label = "Gotta Catch 'Em All!",
                         ) {
-                            PokemonListPage(
+                            PokemonListScreen(
                                 navigateToDetail = { id ->
                                     navController.navigate("pokemon/$id")
                                 },
-                                showSnackbar = snackbarHostState::showSnackbar,
+                                snackbarHostState = snackbarHostState,
                             )
                         }
                         composable(
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                             label = "Pokemon",
                             arguments = listOf(navArgument("id") { type = NavType.IntType }),
                         ) {
-                            PokemonDetailPage(showSnackbar = snackbarHostState::showSnackbar)
+                            PokemonDetailScreen(snackbarHostState = snackbarHostState)
                         }
                     }
                 }

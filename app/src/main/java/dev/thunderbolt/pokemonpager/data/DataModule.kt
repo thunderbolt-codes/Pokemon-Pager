@@ -1,12 +1,6 @@
 package dev.thunderbolt.pokemonpager.data
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
@@ -29,15 +23,6 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler(produceNewData = { emptyPreferences() }),
-            produceFile = { context.preferencesDataStoreFile("pokemon_preferences") },
-        )
-    }
-
-    @Provides
-    @Singleton
     fun providePokemonDatabase(@ApplicationContext context: Context): PokemonDatabase {
         return Room.databaseBuilder(
             context,
@@ -48,20 +33,24 @@ class DataModule {
 
     @Provides
     @Singleton
+    fun providePokemonApi(): PokemonApi {
+        return PokemonApi()
+    }
+
+    @Provides
+    @Singleton
     fun providePokemonPager(
         pokemonDatabase: PokemonDatabase,
         pokemonApi: PokemonApi,
-        dataStore: DataStore<Preferences>,
     ): Pager<Int, PokemonEntity> {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator = PokemonRemoteMediator(
                 pokemonDatabase = pokemonDatabase,
                 pokemonApi = pokemonApi,
-                dataStore = dataStore,
             ),
             pagingSourceFactory = {
-                pokemonDatabase.dao.pagingSource()
+                pokemonDatabase.pokemonDao.pagingSource()
             },
         )
     }

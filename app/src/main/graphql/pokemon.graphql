@@ -1,14 +1,13 @@
 query PokemonList(
-    $offset:Int!
-    $limit:Int!
+    $offset: Int!
+    $limit: Int!
 ) {
     pokemons(
-        offset:$offset,
-        limit:$limit
-    ){
-        count
+        offset: $offset,
+        limit: $limit
+    ) {
         nextOffset
-        results{
+        results {
             id
             name
             image
@@ -16,8 +15,8 @@ query PokemonList(
     }
 }
 
-query PokemonDetail($id:String!) {
-    pokemon(name:$id){
+query PokemonDetail($id: String!) {
+    pokemon(name: $id){
         id
         name
         sprites {

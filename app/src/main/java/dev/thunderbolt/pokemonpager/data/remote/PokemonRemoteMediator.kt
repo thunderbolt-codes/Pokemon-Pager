@@ -1,9 +1,5 @@
 package dev.thunderbolt.pokemonpager.data.remote
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
@@ -11,18 +7,16 @@ import androidx.room.withTransaction
 import com.apollographql.apollo3.exception.ApolloException
 import dev.thunderbolt.pokemonpager.data.local.PokemonDatabase
 import dev.thunderbolt.pokemonpager.data.local.PokemonEntity
+import dev.thunderbolt.pokemonpager.data.local.RemoteKeyEntity
 import dev.thunderbolt.pokemonpager.data.mapper.toPokemonEntity
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PokemonRemoteMediator @Inject constructor(
     private val pokemonDatabase: PokemonDatabase,
     private val pokemonApi: PokemonApi,
-    private val dataStore: DataStore<Preferences>,
 ) : RemoteMediator<Int, PokemonEntity>() {
 
-    private val NEXT_OFFSET = intPreferencesKey("next_offset")
+    private val REMOTE_KEY_ID = "pokemon"
 
     override suspend fun load(
         loadType: LoadType,
@@ -33,12 +27,11 @@ class PokemonRemoteMediator @Inject constructor(
                 LoadType.REFRESH -> 0
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    // RETRIEVE NEXT OFFSET FROM DATA STORE
-                    val nextOffset =
-                        dataStore.data.map { preferences -> preferences[NEXT_OFFSET] ?: 0 }.first()
-                    if (nextOffset == 0) // END OF PAGINATION REACHED
+                    // RETRIEVE NEXT OFFSET FROM DATABASE
+                    val remoteKey = pokemonDatabase.remoteKeyDao.getById(REMOTE_KEY_ID)
+                    if (remoteKey == null || remoteKey.nextOffset == 0) // END OF PAGINATION REACHED
                         return MediatorResult.Success(endOfPaginationReached = true)
-                    nextOffset
+                    remoteKey.nextOffset
                 }
             }
             // MAKE API CALL
@@ -48,17 +41,22 @@ class PokemonRemoteMediator @Inject constructor(
             )
             val results = apiResponse?.results ?: emptyList()
             val nextOffset = apiResponse?.nextOffset ?: 0
-            // SAVE NEXT OFFSET TO DATA STORE
-            dataStore.edit { preferences ->
-                preferences[NEXT_OFFSET] = nextOffset
-            }
-            // SAVE RESULTS TO DATABASE
+            // SAVE RESULTS AND NEXT OFFSET TO DATABASE
             pokemonDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     // IF REFRESHING, CLEAR DATABASE FIRST
-                    pokemonDatabase.dao.clearAll()
+                    pokemonDatabase.pokemonDao.clearAll()
+                    pokemonDatabase.remoteKeyDao.deleteById(REMOTE_KEY_ID)
                 }
-                pokemonDatabase.dao.insertAll(results.mapNotNull { it?.toPokemonEntity() })
+                pokemonDatabase.pokemonDao.insertAll(
+                    results.mapNotNull { it?.toPokemonEntity() }
+                )
+                pokemonDatabase.remoteKeyDao.insert(
+                    RemoteKeyEntity(
+                        id = REMOTE_KEY_ID,
+                        nextOffset = nextOffset,
+                    )
+                )
             }
             // CHECK IF END OF PAGINATION REACHED
             MediatorResult.Success(endOfPaginationReached = results.size < state.config.pageSize)

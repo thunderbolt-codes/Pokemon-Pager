@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,13 +28,13 @@ import dev.thunderbolt.pokemonpager.domain.entity.Pokemon
 import dev.thunderbolt.pokemonpager.domain.entity.Response
 
 @Composable
-fun PokemonDetailPage(showSnackbar: suspend (String) -> Unit) {
+fun PokemonDetailScreen(snackbarHostState: SnackbarHostState) {
     val viewModel = hiltViewModel<PokemonDetailViewModel>()
     val pokemonResponse by viewModel.pokemonResponse.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = pokemonResponse) {
-        if (pokemonResponse is Response.Error) {
-            showSnackbar((pokemonResponse as Response.Error<Pokemon>).error)
+    if (pokemonResponse is Response.Error) {
+        LaunchedEffect(key1 = snackbarHostState) {
+            snackbarHostState.showSnackbar((pokemonResponse as Response.Error).error)
         }
     }
 

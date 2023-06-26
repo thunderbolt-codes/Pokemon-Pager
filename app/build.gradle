@@ -103,9 +103,6 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-paging:$room_version"
 
-    // DATASTORE
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
-
     // COIL
     implementation "io.coil-kt:coil-compose:2.4.0"
 

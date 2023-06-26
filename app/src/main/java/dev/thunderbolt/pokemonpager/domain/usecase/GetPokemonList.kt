@@ -8,8 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class GetPokemonList @Inject constructor(private val pokemonRepository: PokemonRepository) {
+class GetPokemonList @Inject constructor(
+    private val pokemonRepository: PokemonRepository
+) {
     operator fun invoke(): Flow<PagingData<Pokemon>> {
-        return pokemonRepository.getPokemonList().flowOn(Dispatchers.IO)
+        return pokemonRepository.getPokemonList()
+            .flowOn(Dispatchers.IO)
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -21,16 +22,16 @@ import androidx.paging.compose.itemKey
 import dev.thunderbolt.pokemonpager.domain.entity.Pokemon
 
 @Composable
-fun PokemonListPage(
+fun PokemonListScreen(
     navigateToDetail: (Int) -> Unit,
-    showSnackbar: suspend (String) -> Unit,
+    snackbarHostState: SnackbarHostState,
 ) {
     val viewModel = hiltViewModel<PokemonListViewModel>()
     val pokemonPagingItems = viewModel.pokemonPagingDataFlow.collectAsLazyPagingItems()
 
-    LaunchedEffect(key1 = pokemonPagingItems.loadState) {
-        if (pokemonPagingItems.loadState.refresh is LoadState.Error) {
-            showSnackbar(
+    if (pokemonPagingItems.loadState.refresh is LoadState.Error) {
+        LaunchedEffect(key1 = snackbarHostState) {
+            snackbarHostState.showSnackbar(
                 (pokemonPagingItems.loadState.refresh as LoadState.Error).error.message ?: ""
             )
         }
@@ -70,7 +71,7 @@ fun PokemonListContent(
                         )
                         Divider(
                             color = MaterialTheme.colorScheme.secondary,
-                            thickness = 0.5.dp,
+                            thickness = 0.2.dp,
                             modifier = Modifier.padding(horizontal = 20.dp),
                         )
                     }

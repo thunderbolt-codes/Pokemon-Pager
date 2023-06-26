@@ -9,13 +9,13 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Database(
-    entities = [PokemonEntity::class],
+    entities = [PokemonEntity::class, RemoteKeyEntity::class],
     version = 1,
-    exportSchema = false,
 )
 @TypeConverters(Converters::class)
 abstract class PokemonDatabase : RoomDatabase() {
-    abstract val dao: PokemonDao
+    abstract val pokemonDao: PokemonDao
+    abstract val remoteKeyDao: RemoteKeyDao
 }
 
 class Converters {

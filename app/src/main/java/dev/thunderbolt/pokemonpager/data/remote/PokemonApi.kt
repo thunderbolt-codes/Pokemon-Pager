@@ -5,14 +5,15 @@ import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.http.LoggingInterceptor
 import dev.thunderbolt.pokemonpager.data.PokemonDetailQuery
 import dev.thunderbolt.pokemonpager.data.PokemonListQuery
-import javax.inject.Inject
 
-class PokemonApi @Inject constructor() {
+class PokemonApi {
 
     private val BASE_URL = "https://graphql-pokeapi.graphcdn.app/graphql"
 
-    private val apolloClient =
-        ApolloClient.Builder().serverUrl(BASE_URL).addHttpInterceptor(LoggingInterceptor()).build()
+    private val apolloClient = ApolloClient.Builder()
+        .serverUrl(BASE_URL)
+        .addHttpInterceptor(LoggingInterceptor())
+        .build()
 
     suspend fun getPokemonList(offset: Int, limit: Int): PokemonListQuery.Pokemons? {
         val response = apolloClient.query(
@@ -21,6 +22,7 @@ class PokemonApi @Inject constructor() {
                 limit = limit,
             )
         ).execute()
+        // IF RESPONSE HAS ERRORS OR DATA IS NULL, THROW EXCEPTION
         if (response.hasErrors() || response.data == null) {
             throw ApolloException(response.errors.toString())
         }
