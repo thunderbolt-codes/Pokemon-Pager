@@ -11,6 +11,7 @@ import kotlinx.serialization.json.Json
 @Database(
     entities = [PokemonEntity::class, RemoteKeyEntity::class],
     version = 1,
+    exportSchema = false,
 )
 @TypeConverters(Converters::class)
 abstract class PokemonDatabase : RoomDatabase() {
