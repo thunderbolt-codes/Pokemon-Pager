@@ -2,19 +2,18 @@ plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android"
     id "dagger.hilt.android.plugin"
-    id "kotlin-kapt"
     id "com.google.devtools.ksp"
     id "com.apollographql.apollo3" version "$apollo_version"
 }
 
 android {
     namespace "dev.thunderbolt.pokemonpager"
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "dev.thunderbolt.pokemonpager"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -76,7 +75,7 @@ dependencies {
     implementation "androidx.core:core-ktx:1.10.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
-    implementation "androidx.navigation:navigation-compose:2.6.0"
+    implementation "androidx.navigation:navigation-compose:2.7.1"
 
     // COMPOSE
     implementation platform("androidx.compose:compose-bom:$compose_version")
@@ -93,7 +92,7 @@ dependencies {
 
     // HILT
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    ksp "com.google.dagger:hilt-compiler:$hilt_version"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
     // APOLLO
