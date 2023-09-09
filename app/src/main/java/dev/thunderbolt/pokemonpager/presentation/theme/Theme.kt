@@ -1,4 +1,4 @@
-package dev.thunderbolt.pokemonpager.ui.theme
+package dev.thunderbolt.pokemonpager.presentation.theme
 
 import android.app.Activity
 import android.os.Build

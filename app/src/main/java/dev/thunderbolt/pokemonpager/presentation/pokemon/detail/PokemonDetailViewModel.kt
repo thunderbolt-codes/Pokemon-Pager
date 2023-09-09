@@ -1,4 +1,4 @@
-package dev.thunderbolt.pokemonpager.ui.pokemon.detail
+package dev.thunderbolt.pokemonpager.presentation.pokemon.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

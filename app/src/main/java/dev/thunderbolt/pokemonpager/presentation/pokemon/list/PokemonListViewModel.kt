@@ -1,4 +1,4 @@
-package dev.thunderbolt.pokemonpager.ui.pokemon.list
+package dev.thunderbolt.pokemonpager.presentation.pokemon.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package dev.thunderbolt.pokemonpager.ui.pokemon.detail
+package dev.thunderbolt.pokemonpager.presentation.pokemon.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

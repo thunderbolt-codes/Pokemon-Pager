@@ -22,10 +22,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.get
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
-import dev.thunderbolt.pokemonpager.ui.custom.TopBar
-import dev.thunderbolt.pokemonpager.ui.pokemon.detail.PokemonDetailScreen
-import dev.thunderbolt.pokemonpager.ui.pokemon.list.PokemonListScreen
-import dev.thunderbolt.pokemonpager.ui.theme.PokemonPagerTheme
+import dev.thunderbolt.pokemonpager.presentation.custom.TopBar
+import dev.thunderbolt.pokemonpager.presentation.pokemon.detail.PokemonDetailScreen
+import dev.thunderbolt.pokemonpager.presentation.pokemon.list.PokemonListScreen
+import dev.thunderbolt.pokemonpager.presentation.theme.PokemonPagerTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

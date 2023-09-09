@@ -1,4 +1,4 @@
-package dev.thunderbolt.pokemonpager.ui.pokemon.list
+package dev.thunderbolt.pokemonpager.presentation.pokemon.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import dev.thunderbolt.pokemonpager.domain.entity.Pokemon
-import dev.thunderbolt.pokemonpager.ui.theme.PokemonPagerTheme
+import dev.thunderbolt.pokemonpager.presentation.theme.PokemonPagerTheme
 
 @Composable
 fun PokemonItem(

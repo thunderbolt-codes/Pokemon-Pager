@@ -1,4 +1,4 @@
-package dev.thunderbolt.pokemonpager.ui.custom
+package dev.thunderbolt.pokemonpager.presentation.custom
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
