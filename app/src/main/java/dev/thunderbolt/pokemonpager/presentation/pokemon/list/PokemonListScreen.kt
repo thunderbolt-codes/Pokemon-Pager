@@ -30,9 +30,9 @@ fun PokemonListScreen(
     val pokemonPagingItems = viewModel.pokemonPagingDataFlow.collectAsLazyPagingItems()
 
     if (pokemonPagingItems.loadState.refresh is LoadState.Error) {
-        LaunchedEffect(key1 = snackbarHostState) {
+        LaunchedEffect(snackbarHostState) {
             snackbarHostState.showSnackbar(
-                (pokemonPagingItems.loadState.refresh as LoadState.Error).error.message ?: ""
+                (pokemonPagingItems.loadState.refresh as LoadState.Error).error.message.orEmpty()
             )
         }
     }
@@ -60,8 +60,7 @@ fun PokemonListContent(
                     count = pokemonPagingItems.itemCount,
                     key = pokemonPagingItems.itemKey { it.id },
                 ) { index ->
-                    val pokemon = pokemonPagingItems[index]
-                    if (pokemon != null) {
+                    pokemonPagingItems[index]?.let { pokemon ->
                         PokemonItem(
                             pokemon,
                             onClick = {

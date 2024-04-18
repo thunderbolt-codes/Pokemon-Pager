@@ -17,5 +17,4 @@ class PokemonListViewModel @Inject constructor(
 
     val pokemonPagingDataFlow: Flow<PagingData<Pokemon>> = getPokemonList()
         .cachedIn(viewModelScope)
-
 }
