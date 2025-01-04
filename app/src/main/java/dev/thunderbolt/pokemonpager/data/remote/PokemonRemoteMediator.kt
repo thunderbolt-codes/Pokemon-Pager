@@ -4,11 +4,11 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.apollographql.apollo3.exception.ApolloException
 import dev.thunderbolt.pokemonpager.data.local.PokemonDatabase
 import dev.thunderbolt.pokemonpager.data.local.PokemonEntity
 import dev.thunderbolt.pokemonpager.data.local.RemoteKeyEntity
 import dev.thunderbolt.pokemonpager.data.mapper.toPokemonEntity
+import java.io.IOException
 import javax.inject.Inject
 
 class PokemonRemoteMediator @Inject constructor(
@@ -60,7 +60,7 @@ class PokemonRemoteMediator @Inject constructor(
             }
             // CHECK IF END OF PAGINATION REACHED
             MediatorResult.Success(endOfPaginationReached = results.size < state.config.pageSize)
-        } catch (e: ApolloException) {
+        } catch (e: IOException) {
             MediatorResult.Error(e)
         }
     }

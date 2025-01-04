@@ -1,10 +1,10 @@
 package dev.thunderbolt.pokemonpager.data.remote
 
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.exception.ApolloException
-import com.apollographql.apollo3.network.http.LoggingInterceptor
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.network.http.LoggingInterceptor
 import dev.thunderbolt.pokemonpager.data.PokemonDetailQuery
 import dev.thunderbolt.pokemonpager.data.PokemonListQuery
+import java.io.IOException
 
 class PokemonApi {
 
@@ -22,20 +22,33 @@ class PokemonApi {
                 limit = limit,
             )
         ).execute()
-        // IF RESPONSE HAS ERRORS OR DATA IS NULL, THROW EXCEPTION
-        if (response.hasErrors() || response.data == null) {
-            throw ApolloException(response.errors.toString())
+
+        if (response.data != null) {
+            return response.data!!.pokemons
+        } else {
+            // ERROR OCCURRED
+            if (response.exception != null) { // FETCH ERRORS
+                throw IOException(response.exception.toString())
+            } else { // GRAPHQL ERRORS
+                throw IOException(response.errors.toString())
+            }
         }
-        return response.data!!.pokemons
     }
 
     suspend fun getPokemon(id: Int): PokemonDetailQuery.Pokemon? {
         val response = apolloClient.query(
             PokemonDetailQuery(id = id.toString())
         ).execute()
-        if (response.hasErrors() || response.data == null) {
-            throw ApolloException(response.errors.toString())
+
+        if (response.data != null) {
+            return response.data!!.pokemon
+        } else {
+            // Something wrong happened
+            if (response.exception != null) {
+                throw IOException(response.exception.toString())
+            } else {
+                throw IOException(response.errors.toString())
+            }
         }
-        return response.data!!.pokemon
     }
 }

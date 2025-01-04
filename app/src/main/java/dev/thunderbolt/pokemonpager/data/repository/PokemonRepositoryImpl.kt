@@ -3,7 +3,7 @@ package dev.thunderbolt.pokemonpager.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.apollographql.apollo3.exception.ApolloException
+import com.apollographql.apollo.exception.ApolloException
 import dev.thunderbolt.pokemonpager.data.local.PokemonDatabase
 import dev.thunderbolt.pokemonpager.data.local.PokemonEntity
 import dev.thunderbolt.pokemonpager.data.mapper.toPokemon
