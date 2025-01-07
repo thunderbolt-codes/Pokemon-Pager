@@ -102,6 +102,7 @@ dependencies {
 
     // APOLLO
     implementation "com.apollographql.apollo:apollo-runtime:$apollo_version"
+    implementation "com.apollographql.apollo:apollo-normalized-cache:$apollo_version"
 
     // ROOM
     implementation "androidx.room:room-ktx:$room_version"

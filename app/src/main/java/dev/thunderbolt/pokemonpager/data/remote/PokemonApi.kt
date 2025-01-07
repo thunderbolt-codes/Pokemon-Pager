@@ -1,6 +1,10 @@
 package dev.thunderbolt.pokemonpager.data.remote
 
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.cache.normalized.FetchPolicy
+import com.apollographql.apollo.cache.normalized.api.MemoryCacheFactory
+import com.apollographql.apollo.cache.normalized.fetchPolicy
+import com.apollographql.apollo.cache.normalized.normalizedCache
 import com.apollographql.apollo.network.http.LoggingInterceptor
 import dev.thunderbolt.pokemonpager.data.PokemonDetailQuery
 import dev.thunderbolt.pokemonpager.data.PokemonListQuery
@@ -8,11 +12,11 @@ import java.io.IOException
 
 class PokemonApi {
 
-    private val BASE_URL = "https://graphql-pokeapi.graphcdn.app/graphql"
-
     private val apolloClient = ApolloClient.Builder()
-        .serverUrl(BASE_URL)
+        .serverUrl("https://graphql-pokeapi.graphcdn.app/graphql")
         .addHttpInterceptor(LoggingInterceptor())
+        .normalizedCache(MemoryCacheFactory(maxSizeBytes = 10 * 1024 * 1024))
+        .fetchPolicy(FetchPolicy.CacheFirst) // Default fetch policy
         .build()
 
     suspend fun getPokemonList(offset: Int, limit: Int): PokemonListQuery.Pokemons? {
